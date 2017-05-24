@@ -1,22 +1,42 @@
 {
-	"name": "top-bar-nav",
-	"version": "0.0.1",
-	"private": false,
-	"scripts": {
-		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"test": "jest"
-	},
-	"dependencies": {
-		"react": "16.0.0-alpha.6",
-		"react-native": "0.44.0"
-	},
-	"devDependencies": {
-		"babel-jest": "20.0.3",
-		"babel-preset-react-native": "1.9.2",
-		"jest": "20.0.4",
-		"react-test-renderer": "16.0.0-alpha.6"
-	},
-	"jest": {
-		"preset": "react-native"
-	}
+  "name": "top-bar-nav",
+  "version": "1.0.0",
+  "private": false,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "16.0.0-alpha.6",
+    "react-native": "0.44.0"
+  },
+  "devDependencies": {
+    "babel-jest": "20.0.3",
+    "babel-preset-react-native": "1.9.2",
+    "jest": "20.0.4",
+    "react-test-renderer": "16.0.0-alpha.6"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "description": "A top bar navigator for React Native which is super light, simple, and customizeable. ## Install",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MiLeung/TopBarNav.git"
+  },
+  "keywords": [
+    "top",
+    "bar",
+    "nav",
+    "navigator",
+    "react",
+    "native"
+  ],
+  "author": "MiLeung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MiLeung/TopBarNav/issues"
+  },
+  "homepage": "https://github.com/MiLeung/TopBarNav#readme"
 }

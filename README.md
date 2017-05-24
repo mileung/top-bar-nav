@@ -1,5 +1,7 @@
 # top-bar-nav
-A top bar navigator for React Native which is super light, simple, and customizeable.
+
+A top bar navigator for React Native that is super light, simple, and customizable.
+
 ## Install
 
 `npm install --save top-bar-nav`
