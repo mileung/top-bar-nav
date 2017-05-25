@@ -115,20 +115,8 @@ export default class TopBarNav extends React.Component {
               });
 
               let marker = label
-                ? <Animated.Text
-                    style={[
-                      { opacity },
-                      labelStyle
-                    ]}>
-                    {label}
-                  </Animated.Text>
-                : <Animated.Image
-                    style={[
-                      { opacity },
-                      imageStyle
-                    ]}
-                    source={image}
-                  />;
+                ? <Animated.Text style={[{ opacity }, labelStyle]}> {label}</Animated.Text>
+                : <Animated.Image style={[{ opacity }, imageStyle]} source={image} />;
 
               return (
                 <TouchableOpacity
@@ -157,7 +145,6 @@ export default class TopBarNav extends React.Component {
         </View>
         <ScrollView
           ref={ref => this.scrollView = ref}
-          style={{}}
           horizontal={true}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
