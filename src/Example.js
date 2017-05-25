@@ -47,6 +47,7 @@ export default class Example extends React.Component {
           // imageStyle={styles.imageStyle}
           // sidePadding={50} // Can't set sidePadding in headerStyle because it's needed to calculate the width of the tabs
           // inactiveOpacity={1}
+          // fadeLabels={false}
         />
       </View>
     );

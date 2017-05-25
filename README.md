@@ -28,18 +28,18 @@ const ROUTES = {
   // ideally you would have a ROUTES object with multiple React component scenes
 };
 
-// const ROUTESTACK = [
-//   { label: 'React', title: 'Scene' }, // label is what you see in the top bar
-//   { label: 'Native', title: 'Scene' }, // title is just the name of the Component being rendered.  See the renderScene property below
-//   { label: 'Is', title: 'Scene' },
-//   { label: 'Awesome', title: 'Scene' }
-// ];
-
 const ROUTESTACK = [
-  { image: require('./home.png'), title: 'Scene' },
-  { image: require('./search.png'), title: 'Scene' },
-  { image: require('./bell.png'), title: 'Scene' }
+  { label: 'React', title: 'Scene' }, // label is what you see in the top bar
+  { label: 'Native', title: 'Scene' }, // title is just the name of the Component being rendered.  See the renderScene property below
+  { label: 'Is', title: 'Scene' },
+  { label: 'Awesome', title: 'Scene' }
 ];
+
+// const ROUTESTACK = [
+//   { image: require('./home.png'), title: 'Scene' },
+//   { image: require('./search.png'), title: 'Scene' },
+//   { image: require('./bell.png'), title: 'Scene' }
+// ];
 
 export default class Example extends React.Component {
   render() {
@@ -56,12 +56,13 @@ export default class Example extends React.Component {
             return <Component index={i} />;
           }}
           // Below are optional props
-          headerStyle={styles.headerStyle}
-          labelStyle={styles.labelStyle}
-          underlineStyle={styles.underlineStyle}
-          imageStyle={styles.imageStyle}
-          sidePadding={50} // Can't set sidePadding in headerStyle because it's needed to calculate the width of the tabs
-          inactiveOpacity={1}
+          // headerStyle={styles.headerStyle}
+          // labelStyle={styles.labelStyle}
+          // underlineStyle={styles.underlineStyle}
+          // imageStyle={styles.imageStyle}
+          // sidePadding={50} // Can't set sidePadding in headerStyle because it's needed to calculate the width of the tabs
+          // inactiveOpacity={1}
+          // fadeLabels={false}
         />
       </View>
     );

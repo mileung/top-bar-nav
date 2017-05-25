@@ -32,7 +32,8 @@ export default class TopBarNav extends React.Component {
     imageStyle: stylePropType,
     underlineStyle: stylePropType,
     sidePadding: React.PropTypes.number,
-    inactiveOpacity: React.PropTypes.number
+    inactiveOpacity: React.PropTypes.number,
+    fadeLabels: React.PropTypes.bool
   };
 
   static defaultProps = {
@@ -56,25 +57,21 @@ export default class TopBarNav extends React.Component {
       backgroundColor: '#000'
     },
     sidePadding: 8,
-    inactiveOpacity: 0.5
+    inactiveOpacity: 0.5,
+    fadeLabels: true
   };
 
   componentWillMount() {
-    this.state = {
-      index: 0
-    };
-
     let { sidePadding, routeStack } = this.props;
     let { length } = routeStack;
 
     this.tabWidth = (width - sidePadding * 2) / length;
-    this.underlineMarginLeft = new Animated.Value(0);
+    this.scrollX = new Animated.Value(0);
 
     this.maxInput = (length - 1) * width;
     this.maxRange = width - this.tabWidth - sidePadding * 2;
   }
   render() {
-    let { index } = this.state;
     let {
       labels,
       views,
@@ -85,11 +82,15 @@ export default class TopBarNav extends React.Component {
       labelStyle,
       imageStyle,
       sidePadding,
-      inactiveOpacity
+      inactiveOpacity,
+      fadeLabels
     } = this.props;
 
-    let marginLeft = this.underlineMarginLeft.interpolate({
-      inputRange: [0, this.maxInput],
+
+    let position = Animated.divide(this.scrollX, width);
+
+    let underlineX = position.interpolate({
+      inputRange: [0, routeStack.length - 1],
       outputRange: [0, this.maxRange]
     });
 
@@ -103,13 +104,29 @@ export default class TopBarNav extends React.Component {
             }}>
             {routeStack.map((route, i) => {
               let { label, image } = route;
+              let opacity = fadeLabels ? position.interpolate({
+                inputRange: [i - 1, i, i + 1],
+                outputRange: [inactiveOpacity, 1, inactiveOpacity],
+                extrapolate: 'clamp'
+              }) : position.interpolate({
+                inputRange: [i - 0.5, i - 0.499999999, i, i + 0.499999999, i + 0.5],
+                outputRange: [inactiveOpacity, 1, 1, 1, inactiveOpacity],
+                extrapolate: 'clamp'
+              });
+
               let marker = label
-                ? <Text
-                    style={[{ opacity: index === i ? 1 : inactiveOpacity }, labelStyle]}>
+                ? <Animated.Text
+                    style={[
+                      { opacity },
+                      labelStyle
+                    ]}>
                     {label}
-                  </Text>
-                : <Image
-                    style={[{ opacity: index === i ? 1 : inactiveOpacity }, imageStyle]}
+                  </Animated.Text>
+                : <Animated.Image
+                    style={[
+                      { opacity },
+                      imageStyle
+                    ]}
                     source={image}
                   />;
 
@@ -133,7 +150,7 @@ export default class TopBarNav extends React.Component {
               overflow: 'hidden',
               alignSelf: 'center'
             }}>
-            <Animated.View style={{ marginLeft, width: this.tabWidth }}>
+            <Animated.View style={{ marginLeft: underlineX, width: this.tabWidth }}>
               <View style={underlineStyle} />
             </Animated.View>
           </View>
@@ -146,8 +163,7 @@ export default class TopBarNav extends React.Component {
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
           onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: this.underlineMarginLeft } } }],
-            { listener: this.onScroll }
+            [{ nativeEvent: { contentOffset: { x: this.scrollX } } }]
           )}>
           {routeStack.map((route, i) => {
             return (
@@ -160,8 +176,4 @@ export default class TopBarNav extends React.Component {
       </View>
     );
   }
-
-  onScroll = ({ nativeEvent }) => {
-    this.setState({ index: Math.round(nativeEvent.contentOffset.x / width) });
-  };
 }
