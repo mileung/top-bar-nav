@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
 
 ## Demo
 ![](https://media.giphy.com/media/3o7btUgPGcfdiQSL4Y/giphy.gif)
-![](https://media.giphy.com/media/l4FGKDgj25K7HrJ5u/giphy.gif)
+![](https://media.giphy.com/media/xUA7aY6XnuNXEWXC5G/giphy.gif)
