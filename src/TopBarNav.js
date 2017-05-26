@@ -19,10 +19,10 @@ const stylePropType = React.PropTypes.oneOfType([
 
 let defaultStyles = {
   header: {
-    // height: 40,
     borderBottomWidth: 0.5,
     borderColor: '#888',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+     justifyContent: 'flex-end'
   },
   label: {
     fontSize: 17,
@@ -35,6 +35,7 @@ let defaultStyles = {
   },
   underline: {
     height: 1,
+    marginTop: 5,
     backgroundColor: '#000'
   }
 };

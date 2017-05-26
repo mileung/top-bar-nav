@@ -38,14 +38,13 @@ export default class Example extends React.Component {
             return <Component index={i} />;
           }}
           // Below are optional props
-          headerStyle={{ paddingTop: 20 }} // probably want to add paddingTop: 20 if using TopBarNav for the  entire height of screen on iOS
-          // headerStyle={styles.headerStyle}
-          // labelStyle={styles.labelStyle}
-          // underlineStyle={styles.underlineStyle}
-          // imageStyle={styles.imageStyle}
-          // sidePadding={40} // Can't set sidePadding in headerStyle because it's needed to calculate the width of the tabs
-          // inactiveOpacity={1}
-          // fadeLabels={false}
+          headerStyle={[styles.headerStyle, { paddingTop: 20 }]} // probably want to add paddingTop: 20 if using TopBarNav for the  entire height of screen on iOS
+          labelStyle={styles.labelStyle}
+          underlineStyle={styles.underlineStyle}
+          imageStyle={styles.imageStyle}
+          sidePadding={40} // Can't set sidePadding in headerStyle because it's needed to calculate the width of the tabs
+          inactiveOpacity={1}
+          fadeLabels={false}
         />
       </View>
     );
