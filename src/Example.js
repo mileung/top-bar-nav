@@ -17,7 +17,7 @@ const ROUTESTACK = [
   { label: 'React', title: 'Scene' }, // label is what you see in the top bar
   { label: 'Native', title: 'Scene' }, // title is just the name of the Component being rendered.  See the renderScene property below
   { label: 'Is', title: 'Scene' },
-  { label: 'Awesome', title: 'Scene' }
+  { label: 'Cool', title: 'Scene' }
 ];
 
 // const ROUTESTACK = [
@@ -29,10 +29,7 @@ const ROUTESTACK = [
 export default class Example extends React.Component {
   render() {
     return (
-      // top-bar-nav does not take into account the height of the iOS status bar
-      // so that's why there's paddingTop: 20
-      // you could also just use a View with a height of 20
-      <View style={{ flex: 1, paddingTop: 20 }}>
+      <View style={{ flex: 1}}>
         <TopBarNav
           routeStack={ROUTESTACK}
           renderScene={(route, i) => {
@@ -41,6 +38,7 @@ export default class Example extends React.Component {
             return <Component index={i} />;
           }}
           // Below are optional props
+          headerStyle={{ paddingTop: 20 }} // probably want to add paddingTop: 20 if using TopBarNav for the  entire height of screen on iOS
           // headerStyle={styles.headerStyle}
           // labelStyle={styles.labelStyle}
           // underlineStyle={styles.underlineStyle}
@@ -56,7 +54,6 @@ export default class Example extends React.Component {
 
 const styles = StyleSheet.create({
   headerStyle: {
-    height: 30,
     borderBottomWidth: 1,
     borderColor: '#e6faff',
     backgroundColor: '#3385ff'

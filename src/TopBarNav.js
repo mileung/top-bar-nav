@@ -17,6 +17,28 @@ const stylePropType = React.PropTypes.oneOfType([
   React.PropTypes.number
 ]);
 
+let defaultStyles = {
+  header: {
+    // height: 40,
+    borderBottomWidth: 0.5,
+    borderColor: '#888',
+    backgroundColor: '#fff'
+  },
+  label: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#000'
+  },
+  image: {
+    height: 30,
+    width: 30
+  },
+  underline: {
+    height: 1,
+    backgroundColor: '#000'
+  }
+};
+
 export default class TopBarNav extends React.Component {
   static propTypes = {
     routeStack: React.PropTypes.arrayOf(
@@ -38,25 +60,6 @@ export default class TopBarNav extends React.Component {
   };
 
   static defaultProps = {
-    headerStyle: {
-      height: 40,
-      borderBottomWidth: 0.5,
-      borderColor: '#888',
-      backgroundColor: '#fff'
-    },
-    labelStyle: {
-      fontSize: 17,
-      fontWeight: '600',
-      color: '#000'
-    },
-    imageStyle: {
-      height: 30,
-      width: 30
-    },
-    underlineStyle: {
-      height: 1,
-      backgroundColor: '#000'
-    },
     sidePadding: 8,
     inactiveOpacity: 0.5,
     fadeLabels: true
@@ -96,17 +99,19 @@ export default class TopBarNav extends React.Component {
       outputRange: [0, maxRange]
     });
 
+    headerStyle = Array.isArray(headerStyle) ? headerStyle : [headerStyle]
+    underlineStyle = Array.isArray(underlineStyle) ? underlineStyle : [underlineStyle]
+    labelStyle = Array.isArray(labelStyle) ? labelStyle : [labelStyle]
+    imageStyle = Array.isArray(imageStyle) ? imageStyle : [imageStyle]
+
     return (
       <View
         onLayout={this.calibrate}
         style={{ flex: 1 }}
         >
-        <View style={[headerStyle, { paddingHorizontal: sidePadding }]}>
+        <View style={[defaultStyles.header, ...headerStyle, { paddingHorizontal: sidePadding }]}>
           <View
-            style={{
-              flex: 1,
-              flexDirection: 'row'
-            }}>
+            style={{ flexDirection: 'row' }}>
             {routeStack.map((route, i) => {
               let { label, image } = route;
               let opacity = fadeLabels ? position.interpolate({
@@ -120,17 +125,13 @@ export default class TopBarNav extends React.Component {
               });
 
               let marker = label
-                ? <Animated.Text style={[{ opacity }, labelStyle]}> {label}</Animated.Text>
-                : <Animated.Image style={[{ opacity }, imageStyle]} source={image} />;
+                ? <Animated.Text style={[{ opacity }, defaultStyles.label, ...labelStyle]}> {label}</Animated.Text>
+                : <Animated.Image style={[{ opacity }, defaultStyles.image, ...imageStyle]} source={image} />;
 
               return (
                 <TouchableOpacity
                   key={i}
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
+                  style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
                   onPress={() => this.scrollView.scrollTo({ x: i * width })}>
                   {marker}
                 </TouchableOpacity>
@@ -141,10 +142,10 @@ export default class TopBarNav extends React.Component {
             style={{
               width: width - 2 * sidePadding,
               overflow: 'hidden',
-              alignSelf: 'center'
+              alignSelf: 'center',
             }}>
             <Animated.View style={{ marginLeft: underlineX, width: tabWidth }}>
-              <View style={underlineStyle} />
+              <View style={[defaultStyles.underline, ...underlineStyle, ]}></View>
             </Animated.View>
           </View>
         </View>
