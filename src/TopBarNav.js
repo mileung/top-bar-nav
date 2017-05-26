@@ -13,6 +13,7 @@ let { width } = Dimensions.get('window');
 
 const stylePropType = React.PropTypes.oneOfType([
   React.PropTypes.object,
+  React.PropTypes.array,
   React.PropTypes.number
 ]);
 
@@ -61,16 +62,15 @@ export default class TopBarNav extends React.Component {
     fadeLabels: true
   };
 
-  componentWillMount() {
-    let { sidePadding, routeStack } = this.props;
-    let { length } = routeStack;
-
-    this.tabWidth = (width - sidePadding * 2) / length;
-    this.scrollX = new Animated.Value(0);
-
-    this.maxInput = (length - 1) * width;
-    this.maxRange = width - this.tabWidth - sidePadding * 2;
+  state = {
+    width: 1, // 1 to prevent dividing by zero later on
+    tabWidth: 0,
+    scrollX: new Animated.Value(0),
+    maxInput: 0,
+    maxRange: 0,
+    previousWidth: null
   }
+
   render() {
     let {
       labels,
@@ -86,16 +86,21 @@ export default class TopBarNav extends React.Component {
       fadeLabels
     } = this.props;
 
+    let { width, tabWidth, scrollX, maxInput, maxRange } = this.state;
 
-    let position = Animated.divide(this.scrollX, width);
+
+    let position = Animated.divide(scrollX, width);
 
     let underlineX = position.interpolate({
       inputRange: [0, routeStack.length - 1],
-      outputRange: [0, this.maxRange]
+      outputRange: [0, maxRange]
     });
 
     return (
-      <View style={{ flex: 1 }}>
+      <View
+        onLayout={this.calibrate}
+        style={{ flex: 1 }}
+        >
         <View style={[headerStyle, { paddingHorizontal: sidePadding }]}>
           <View
             style={{
@@ -138,7 +143,7 @@ export default class TopBarNav extends React.Component {
               overflow: 'hidden',
               alignSelf: 'center'
             }}>
-            <Animated.View style={{ marginLeft: underlineX, width: this.tabWidth }}>
+            <Animated.View style={{ marginLeft: underlineX, width: tabWidth }}>
               <View style={underlineStyle} />
             </Animated.View>
           </View>
@@ -150,17 +155,34 @@ export default class TopBarNav extends React.Component {
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
           onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: this.scrollX } } }]
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }]
           )}>
-          {routeStack.map((route, i) => {
-            return (
-              <View key={i} style={{ width }}>
-                {renderScene(route, i)}
-              </View>
-            );
-          })}
+          {routeStack.map((route, i) => (
+            <View key={i} style={{ width }}>
+              {renderScene(route, i)}
+            </View>
+          ))}
         </ScrollView>
       </View>
     );
+  }
+
+  calibrate = ({ nativeEvent }) => {
+    let index = Math.ceil(this.state.scrollX._value / this.state.previousWidth);
+    let { width } = nativeEvent.layout;
+    let { sidePadding, routeStack } = this.props;
+    let { length } = routeStack;
+
+    let tabWidth = (width - sidePadding * 2) / length;
+    let maxInput = (length - 1) * width;
+    let maxRange = width - tabWidth - sidePadding * 2;
+
+    this.setState({
+      width,
+      tabWidth,
+      maxInput,
+      maxRange,
+      previousWidth: width
+    }, () => setTimeout(() => this.scrollView.scrollTo({ x: index * width }), 1));
   }
 }
