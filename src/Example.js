@@ -50,6 +50,31 @@ export default class Example extends React.Component {
       </View>
     );
   }
+
+  anotherRender() { // if rendering the nav bar at the bottom is your thing
+    return (
+      <View style={{ flex: 1}}>
+        <View style={{ flex: 1, transform: [{ scaleY: -1 }] }}>
+          <TopBarNav
+            // routeStack and renderScene are required props
+            routeStack={ROUTESTACK}
+            renderScene={(route, i) => {
+              // This is a lot like the now deprecated Navigator component
+              let Component = ROUTES[route.title];
+              return (
+                <View style={{ flex: 1, transform: [{ scaleY: -1 }] }}>
+                  <Component index={i} />
+                </View>
+              );
+            }}
+            // Below are optional props
+            headerStyle={{ paddingTop: 20, transform: [{ scaleY: -1 }] }} // probably want to add paddingTop: 20 if using TopBarNav for the  entire height of screen on iOS
+            underlineStyle={{ height: 3 }}
+          />
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
