@@ -31,6 +31,7 @@ export default class Example extends React.Component {
     return (
       <View style={{ flex: 1}}>
         <TopBarNav
+          // routeStack and renderScene are required props
           routeStack={ROUTESTACK}
           renderScene={(route, i) => {
             // This is a lot like the now deprecated Navigator component

@@ -15,7 +15,7 @@ A top bar navigator for React Native that is super light, simple, and customizab
 ```javascript
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import TopBarNav from './TopBarNav';
+import TopBarNav from 'top-bar-nav';
 
 const Scene = ({ index }) => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -46,6 +46,7 @@ export default class Example extends React.Component {
     return (
       <View style={{ flex: 1}}>
         <TopBarNav
+          // routeStack and renderScene are required props
           routeStack={ROUTESTACK}
           renderScene={(route, i) => {
             // This is a lot like the now deprecated Navigator component

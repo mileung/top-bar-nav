@@ -1,15 +1,13 @@
 import React from 'react';
+// import PropTypes from 'prop-types';
 import {
   View,
   Text,
   ScrollView,
-  Dimensions,
   Animated,
   TouchableOpacity,
   Image
 } from 'react-native';
-
-let { width } = Dimensions.get('window');
 
 const stylePropType = React.PropTypes.oneOfType([
   React.PropTypes.object,
