@@ -1,6 +1,6 @@
 {
   "name": "top-bar-nav",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": false,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -9,8 +9,9 @@
     "android": "react-native run-android"
   },
   "dependencies": {
+    "prop-types": "^15.5.10",
     "react": "16.0.0-alpha.6",
-    "react-native": "0.44.0"
+    "react-native": "^0.44.2"
   },
   "devDependencies": {
     "babel-jest": "20.0.3",

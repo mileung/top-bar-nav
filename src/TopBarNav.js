@@ -1,5 +1,5 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import {
   View,
   Text,
@@ -9,10 +9,10 @@ import {
   Image
 } from 'react-native';
 
-const stylePropType = React.PropTypes.oneOfType([
-  React.PropTypes.object,
-  React.PropTypes.array,
-  React.PropTypes.number
+const stylePropType = PropTypes.oneOfType([
+  PropTypes.object,
+  PropTypes.array,
+  PropTypes.number
 ]);
 
 let defaultStyles = {
@@ -40,22 +40,22 @@ let defaultStyles = {
 
 export default class TopBarNav extends React.Component {
   static propTypes = {
-    routeStack: React.PropTypes.arrayOf(
-      React.PropTypes.shape({
-        label: React.PropTypes.oneOfType([
-          React.PropTypes.string,
-          React.PropTypes.number
+    routeStack: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.number
         ])
       })
     ).isRequired,
-    renderScene: React.PropTypes.func.isRequired,
+    renderScene: PropTypes.func.isRequired,
     headerStyle: stylePropType,
     labelStyle: stylePropType,
     imageStyle: stylePropType,
     underlineStyle: stylePropType,
-    sidePadding: React.PropTypes.number,
-    inactiveOpacity: React.PropTypes.number,
-    fadeLabels: React.PropTypes.bool
+    sidePadding: PropTypes.number,
+    inactiveOpacity: PropTypes.number,
+    fadeLabels: PropTypes.bool
   };
 
   static defaultProps = {
