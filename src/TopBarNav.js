@@ -6,7 +6,10 @@ import {
   ScrollView,
   Animated,
   TouchableOpacity,
-  Image
+  Image,
+  ViewStylePropTypes,
+  TextStylePropTypes,
+  StyleSheet
 } from 'react-native';
 
 const stylePropType = PropTypes.oneOfType([
@@ -15,9 +18,9 @@ const stylePropType = PropTypes.oneOfType([
   PropTypes.number
 ]);
 
-let defaultStyles = {
+let defaultStyles = StyleSheet.create({
   header: {
-    borderBottomWidth: 0.5,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: '#888',
     backgroundColor: '#fff',
      justifyContent: 'flex-end'
@@ -36,7 +39,7 @@ let defaultStyles = {
     marginTop: 5,
     backgroundColor: '#000'
   }
-};
+});
 
 export default class TopBarNav extends React.Component {
   static propTypes = {
@@ -55,23 +58,31 @@ export default class TopBarNav extends React.Component {
     underlineStyle: stylePropType,
     sidePadding: PropTypes.number,
     inactiveOpacity: PropTypes.number,
-    fadeLabels: PropTypes.bool
-  };
+    fadeLabels: PropTypes.bool,
+    scrollViewProps: PropTypes.object,
+    onPage: PropTypes.func,
+    onScroll: PropTypes.func
+  }
 
   static defaultProps = {
     sidePadding: 8,
     inactiveOpacity: 0.5,
-    fadeLabels: true
-  };
+    fadeLabels: true,
+    scrollViewProps: {},
+    onPage: () => {},
+    onScroll: () => {}
+  }
 
   state = {
     width: 1, // 1 to prevent dividing by zero later on
     tabWidth: 0,
-    scrollX: new Animated.Value(0),
     maxInput: 0,
-    maxRange: 0,
-    previousWidth: null
+    maxRange: 0
   }
+
+  index = 0
+  scrollX = new Animated.Value(0)
+  previousWidth = null
 
   render() {
     let {
@@ -85,13 +96,15 @@ export default class TopBarNav extends React.Component {
       imageStyle,
       sidePadding,
       inactiveOpacity,
-      fadeLabels
+      fadeLabels,
+      scrollViewProps,
+      onPage,
+      onScroll
     } = this.props;
 
-    let { width, tabWidth, scrollX, maxInput, maxRange } = this.state;
+    let { width, tabWidth, maxInput, maxRange } = this.state;
 
-
-    let position = Animated.divide(scrollX, width);
+    let position = Animated.divide(this.scrollX, width);
 
     let underlineX = position.interpolate({
       inputRange: [0, routeStack.length - 1],
@@ -149,14 +162,22 @@ export default class TopBarNav extends React.Component {
           </View>
         </View>
         <ScrollView
+          {...scrollViewProps}
           ref={ref => this.scrollView = ref}
           horizontal={true}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }]
-          )}>
+          onScroll={data => {
+            let { x } = data.nativeEvent.contentOffset;
+            this.scrollX.setValue(x);
+            onScroll(data);
+
+            if (x % width === 0 && x / width !== this.index) {
+              this.index = x / width;
+              onPage(this.index);
+            }
+          }}>
           {routeStack.map((route, i) => (
             <View key={i} style={{ width }}>
               {renderScene(route, i)}
@@ -168,7 +189,7 @@ export default class TopBarNav extends React.Component {
   }
 
   calibrate = ({ nativeEvent }) => {
-    let index = Math.ceil(this.state.scrollX._value / this.state.previousWidth);
+    this.index = Math.ceil(this.scrollX._value / this.previousWidth);
     let { width } = nativeEvent.layout;
     let { sidePadding, routeStack } = this.props;
     let { length } = routeStack;
@@ -177,12 +198,13 @@ export default class TopBarNav extends React.Component {
     let maxInput = (length - 1) * width;
     let maxRange = width - tabWidth - sidePadding * 2;
 
+    this.previousWidth = width;
+
     this.setState({
       width,
       tabWidth,
       maxInput,
       maxRange,
-      previousWidth: width
-    }, () => setTimeout(() => this.scrollView.scrollTo({ x: index * width }), 1));
+    }, () => setTimeout(() => this.scrollView.scrollTo({ x: this.index * width }), 1));
   }
 }

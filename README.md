@@ -123,3 +123,41 @@ const styles = StyleSheet.create({
 ![](https://media.giphy.com/media/xUA7aY6XnuNXEWXC5G/giphy.gif)
 
 ![](https://media.giphy.com/media/xUA7aKY4kc84gJIgdG/giphy.gif)
+
+## Props
+
+```javascript
+const stylePropType = PropTypes.oneOfType([
+  PropTypes.object,
+  PropTypes.array,
+  PropTypes.number
+]);
+
+static propTypes = {
+  routeStack: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+      ])
+    })
+  ).isRequired,
+  renderScene: PropTypes.func.isRequired,
+  headerStyle: stylePropType,
+  labelStyle: stylePropType,
+  imageStyle: stylePropType,
+  underlineStyle: stylePropType,
+  sidePadding: PropTypes.number,
+  inactiveOpacity: PropTypes.number,
+  fadeLabels: PropTypes.bool,
+  scrollViewProps: PropTypes.object,
+  onPage: PropTypes.func, // only called with the index changes
+  onScroll: PropTypes.func // you could do animations with this if you want; passed { nativeEvent }
+}
+
+static defaultProps = {
+  sidePadding: 8,
+  inactiveOpacity: 0.5,
+  fadeLabels: true,
+  scrollViewProps: {},
+  onPage: () => {},
