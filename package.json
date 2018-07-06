@@ -14,7 +14,7 @@
     "ios": "react-native run-ios",
     "android": "react-native run-android"
   },
-  "peerdependencies": {
+  "peerDependencies": {
     "react": "^16.0.0",
     "react-native": "^0.40.0"
   },
