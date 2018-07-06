@@ -1,12 +1,22 @@
 {
   "name": "top-bar-nav",
-  "version": "1.0.15",
+  "version": "1.0.2",
   "private": false,
   "description": "A top bar navigator for React Native which is super light, simple, and customizeable. ## Install",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MiLeung/top-bar-nav.git"
+  },
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "reset": "npm start -- --reset-cache",
+    "ios": "react-native run-ios",
+    "android": "react-native run-android"
+  },
+  "peerdependencies": {
+    "react": "^16.0.0",
+    "react-native": "^0.40.0"
   },
   "keywords": [
     "top",
@@ -17,7 +27,7 @@
     "native"
   ],
   "author": "MiLeung",
-  "license": "MIT",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/MiLeung/top-bar-nav/issues"
   },
