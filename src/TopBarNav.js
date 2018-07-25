@@ -49,9 +49,7 @@ export default class TopBarNav extends React.Component {
 		sidePadding: PropTypes.number,
 		inactiveOpacity: PropTypes.number,
 		fadeLabels: PropTypes.bool,
-		scrollViewProps: PropTypes.object,
-		onPage: PropTypes.func,
-		onScroll: PropTypes.func
+		scrollViewProps: PropTypes.object
 	};
 
 	static defaultProps = {
@@ -85,9 +83,7 @@ export default class TopBarNav extends React.Component {
 			sidePadding,
 			inactiveOpacity,
 			fadeLabels,
-			scrollViewProps,
-			onPage,
-			onScroll
+			scrollViewProps
 		} = this.props;
 
 		const { width, tabWidth, maxInput, maxRange } = this.state;
@@ -151,34 +147,31 @@ export default class TopBarNav extends React.Component {
 					</View>
 					<View style={{ width: width - 2 * sidePadding, overflow: 'hidden', alignSelf: 'center' }}>
 						<Animated.View
-							style={{ marginLeft: underlineX, width: tabWidth, alignItems: 'center' }}>
+							style={{
+								transform: [{ translateX: underlineX }],
+								width: tabWidth,
+								alignItems: 'center'
+							}}>
 							<View style={[defaultStyles.underline, ...this.formatStyle(underlineStyle)]} />
 						</Animated.View>
 					</View>
 				</View>
-				<ScrollView
+				<Animated.ScrollView
 					{...scrollViewProps}
 					ref={ref => (this.scrollView = ref)}
 					horizontal={true}
 					pagingEnabled={true}
 					showsHorizontalScrollIndicator={false}
-					scrollEventThrottle={16}
-					onScroll={data => {
-						const { x } = data.nativeEvent.contentOffset;
-						this.scrollX.setValue(x);
-						onScroll && onScroll(data);
-
-						if (onPage && x % width === 0 && x / width !== this.index) {
-							this.index = x / width;
-							onPage(this.index);
-						}
-					}}>
+					scrollEventThrottle={1}
+					onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }], {
+						useNativeDriver: true
+					})}>
 					{routeStack.map((route, i) => (
 						<View key={i} style={{ width }}>
 							{renderScene(route, i)}
 						</View>
 					))}
-				</ScrollView>
+				</Animated.ScrollView>
 			</View>
 		);
 	}
@@ -202,7 +195,7 @@ export default class TopBarNav extends React.Component {
 				maxInput,
 				maxRange
 			},
-			() => setTimeout(() => this.scrollView.scrollTo({ x: this.index * width }), 1)
+			() => setTimeout(() => this.scrollView.getNode().scrollTo({ x: this.index * width }), 1)
 		);
 	};
 

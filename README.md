@@ -123,24 +123,22 @@ const styles = StyleSheet.create({
 
 ```javascript
 static propTypes = {
-  routeStack: PropTypes.array.isRequired,
-  renderScene: PropTypes.func,
-  headerStyle: stylePropType,
-  labelStyle: stylePropType,
-  imageStyle: stylePropType,
-  underlineStyle: stylePropType,
-  sidePadding: PropTypes.number,
-  inactiveOpacity: PropTypes.number,
-  fadeLabels: PropTypes.bool,
-  scrollViewProps: PropTypes.object,
-  onPage: PropTypes.func,
-  onScroll: PropTypes.func
+	routeStack: PropTypes.array.isRequired,
+	renderScene: PropTypes.func,
+	headerStyle: stylePropType,
+	textStyle: stylePropType,
+	imageStyle: stylePropType,
+	underlineStyle: stylePropType,
+	sidePadding: PropTypes.number,
+	inactiveOpacity: PropTypes.number,
+	fadeLabels: PropTypes.bool,
+	scrollViewProps: PropTypes.object
 };
 
 static defaultProps = {
-  sidePadding: 0,
-  inactiveOpacity: 0.5,
-  fadeLabels: false,
-  scrollViewProps: {}
+	sidePadding: 0,
+	inactiveOpacity: 0.5,
+	fadeLabels: false,
+	scrollViewProps: {}
 };
 ```
