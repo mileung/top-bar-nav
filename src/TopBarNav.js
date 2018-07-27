@@ -59,16 +59,23 @@ export default class TopBarNav extends React.Component {
 		scrollViewProps: {}
 	};
 
-	state = {
-		width: 1, // 1 to prevent dividing by zero later on
-		tabWidth: 0,
-		maxInput: 0,
-		maxRange: 0
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			width: 1, // 1 to prevent dividing by zero later on
+			tabWidth: 0,
+			maxInput: 0,
+			maxRange: 0
+		};
 
-	index = 0;
-	scrollX = new Animated.Value(0);
-	previousWidth = null;
+		this.index = 0;
+		this.scrollX = new Animated.Value(0);
+		this.scrollXValue = 0;
+		this.lastCalibrate = Date.now();
+		this.previousWidth = null;
+
+		this.scrollX.addListener(({ value }) => (this.scrollXValue = value));
+	}
 
 	render() {
 		let {
@@ -139,7 +146,7 @@ export default class TopBarNav extends React.Component {
 								<TouchableOpacity
 									key={i}
 									style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-									onPress={() => this.scrollView.scrollTo({ x: i * width })}>
+									onPress={() => this.scrollView.getNode().scrollTo({ x: i * width })}>
 									<Animated.View style={{ opacity }}>{label}</Animated.View>
 								</TouchableOpacity>
 							);
@@ -177,26 +184,28 @@ export default class TopBarNav extends React.Component {
 	}
 
 	calibrate = ({ nativeEvent }) => {
-		this.index = Math.ceil(this.scrollX._value / this.previousWidth);
 		const { width } = nativeEvent.layout;
-		const { sidePadding, routeStack } = this.props;
-		const { length } = routeStack;
 
-		const tabWidth = (width - sidePadding * 2) / length;
-		const maxInput = (length - 1) * width;
-		const maxRange = width - tabWidth - sidePadding * 2;
+		if (this.previousWidth !== width) {
+			this.index = Math.ceil(this.scrollXValue / this.previousWidth);
+			const { sidePadding, routeStack } = this.props;
+			const { length } = routeStack;
+			const tabWidth = (width - sidePadding * 2) / length;
+			const maxInput = (length - 1) * width;
+			const maxRange = width - tabWidth - sidePadding * 2;
 
-		this.previousWidth = width;
+			this.previousWidth = width;
 
-		this.setState(
-			{
-				width,
-				tabWidth,
-				maxInput,
-				maxRange
-			},
-			() => setTimeout(() => this.scrollView.getNode().scrollTo({ x: this.index * width }), 1)
-		);
+			this.setState(
+				{
+					width,
+					tabWidth,
+					maxInput,
+					maxRange
+				},
+				() => this.scrollView.getNode().scrollTo({ x: this.index * width })
+			);
+		}
 	};
 
 	formatStyle = style => (Array.isArray(style) ? style : [style]);
