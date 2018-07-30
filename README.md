@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
 ```javascript
 static propTypes = {
 	routeStack: PropTypes.array.isRequired,
+	initialIndex: PropTypes.number,
 	renderScene: PropTypes.func,
 	headerStyle: stylePropType,
 	textStyle: stylePropType,
@@ -136,6 +137,7 @@ static propTypes = {
 };
 
 static defaultProps = {
+	initialIndex: 0,
 	sidePadding: 0,
 	inactiveOpacity: 0.5,
 	fadeLabels: false,

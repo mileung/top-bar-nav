@@ -38,6 +38,7 @@ export default class Example extends React.Component {
 					underlineStyle={styles.underlineStyle}
 					imageStyle={styles.imageStyle}
 					sidePadding={40} // Can't set sidePadding in headerStyle because it's needed to calculate the width of the tabs
+					initialIndex={2}
 					inactiveOpacity={1}
 					fadeLabels={true}
 				/>

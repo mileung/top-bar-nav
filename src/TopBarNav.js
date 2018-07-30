@@ -9,7 +9,8 @@ import {
 	Image,
 	ViewStylePropTypes,
 	TextStylePropTypes,
-	StyleSheet
+	StyleSheet,
+	Dimensions
 } from 'react-native';
 
 const stylePropType = PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number]);
@@ -38,9 +39,12 @@ const defaultStyles = StyleSheet.create({
 	}
 });
 
+const { width: INITIAL_WINDOW_WIDTH } = Dimensions.get('window');
+
 export default class TopBarNav extends React.Component {
 	static propTypes = {
 		routeStack: PropTypes.array.isRequired,
+		initialIndex: PropTypes.number,
 		renderScene: PropTypes.func,
 		headerStyle: stylePropType,
 		textStyle: stylePropType,
@@ -53,6 +57,7 @@ export default class TopBarNav extends React.Component {
 	};
 
 	static defaultProps = {
+		initialIndex: 0,
 		sidePadding: 0,
 		inactiveOpacity: 0.5,
 		fadeLabels: false,
@@ -62,17 +67,17 @@ export default class TopBarNav extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			width: 1, // 1 to prevent dividing by zero later on
+			width: INITIAL_WINDOW_WIDTH,
 			tabWidth: 0,
 			maxInput: 0,
 			maxRange: 0
 		};
 
-		this.index = 0;
-		this.scrollX = new Animated.Value(0);
-		this.scrollXValue = 0;
-		this.lastCalibrate = Date.now();
-		this.previousWidth = null;
+		this.index = props.initialIndex;
+		this.initialScrollTo = this.index * INITIAL_WINDOW_WIDTH;
+		this.scrollX = new Animated.Value(this.initialScrollTo);
+		this.scrollXValue = this.initialScrollTo;
+		this.previousWidth = INITIAL_WINDOW_WIDTH;
 
 		this.scrollX.addListener(({ value }) => (this.scrollXValue = value));
 	}
@@ -183,10 +188,22 @@ export default class TopBarNav extends React.Component {
 		);
 	}
 
-	calibrate = ({ nativeEvent }) => {
+	componentDidMount() {
+		this.scrollView.getNode().scrollTo({ x: this.initialScrollTo });
+		this.calibrate(
+			{
+				nativeEvent: {
+					layout: { width: INITIAL_WINDOW_WIDTH }
+				}
+			},
+			true
+		);
+	}
+
+	calibrate = ({ nativeEvent }, force) => {
 		const { width } = nativeEvent.layout;
 
-		if (this.previousWidth !== width) {
+		if (this.previousWidth !== width || force) {
 			this.index = Math.ceil(this.scrollXValue / this.previousWidth);
 			const { sidePadding, routeStack } = this.props;
 			const { length } = routeStack;
@@ -203,7 +220,7 @@ export default class TopBarNav extends React.Component {
 					maxInput,
 					maxRange
 				},
-				() => this.scrollView.getNode().scrollTo({ x: this.index * width })
+				() => setTimeout(() => this.scrollView.getNode().scrollTo({ x: this.index * width }), 0)
 			);
 		}
 	};
